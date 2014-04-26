@@ -4,13 +4,25 @@
 var mongoose = require('mongoose');
 
 var partySchema = new mongoose.Schema({
-	partyName: {
+	name: {
 		type: String,
 		required: true
 	},
-	owners: {
-		type: Array,
+	owner_first: {
+		type: String,
 		required: true
+	},
+	owner_last: {
+		type: String,
+		required: true
+	},
+	owner_id: {
+		type: String,
+		required: true
+	},
+	collaborators: {
+		type: Array,
+		required: false
 	},
 	slug: {
 		type: String,
@@ -23,7 +35,11 @@ var partySchema = new mongoose.Schema({
 	},
 	playlist:{
 		type: Array,
-		required: true
+		required: false
+	},
+	played_songs: {
+		type: Array,
+		required: false
 	}
 });
 
