@@ -4,16 +4,31 @@
  */
 
 var Routes = function (app, server) {
-	var databaseUrl = 'localdb';
-	var collections = ['playlists'];
-	var db = require('mongojs').connect(databaseUrl, collections);
+	// var databaseUrl = 'localdb';
+	// var collections = ['playlists'];
+	// var db = require('mongojs').connect(databaseUrl, collections);
+	var mongoose = require('mongoose');
+	var dbURL = 'mongodb://localhost/playlists';
+	mongoose.connect(dbURL);
+	var pageTitle = 'MyApp : ';
 
 	// HTTP GET routing
+	// ================
+
+	// landing page routing
 	app.get('/', function(req, res){
 	  res.render('index', { title: 'Express' });
 	});
 
-	app.get('/:playlistURL', function(req, res){
+	// add party routing
+	app.get('/addparty', function (req, res) {
+		res.render('addparty', {
+			title: pageTitle + 'Add a new party'
+		})
+	});
+
+	// dynamic party url routing
+	app.get('/p/:playlistURL', function(req, res){
 		// check if the playlist URL is valid
 		if (req.params.playlistURL == "deadbeef")
 			// it's valid, so we serve the playlist view page
@@ -25,8 +40,24 @@ var Routes = function (app, server) {
 
 
 	// HTTP POST routing
+	// =================
+
+	// routing for the add new post request
 	app.post('/addparty-formdata', function (req, res) {
-		
+		var playlist = {
+			name: req.body.partyName,
+			created_on: new Date(),
+			owners: req.body.owners, // <-- FIX THIS
+			location: req.body.location
+		}
+		// inserting the query into the database
+		db.playlists.insert(playlist, function (err, document) {
+			if (err) {
+				// re-route to error page
+			} else {
+				// re-route to success page
+			}
+		});
 	});
 
 	// Socket.io stuff
@@ -68,7 +99,6 @@ var Routes = function (app, server) {
 	 * @param  {String} voteType Type of vote. Can be 'up' or 'down'
 	 */
 	function updateVote(partyID, songData, voteType) {
-
 	};
 };
 
