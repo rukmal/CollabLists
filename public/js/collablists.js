@@ -22,26 +22,22 @@ $(function() {
   });
 
   $('#apiswf').bind('playingSourceChanged.rdio', function(e, playingSource) {
-    if (queue.length === 0) {
-      // queue = [playingSource.key].concat(queue);
-    }
+    queue.shift();
+      queue = [playingSource.key].concat(queue);
     console.log(queue);
   });
 
   $('#apiswf').bind('queueChanged.rdio', function(e, newQueue) {
-    queue = [];
+    queue = [queue[0]];
     $.each(newQueue, function(i, item) {
       queue.push(item.key);
     });
-    console.log('new: ' + queue);
     console.log(queue);
   });
 
   var queueTrack = function(event) {
     var trackId = event.currentTarget.dataset.id.split(':')[2];
     $('#apiswf').rdio().queue(trackId);
-    queue.push(trackId);
-    console.log(queue);
   }
 
   $('#search-input').keyup(function(event) {
@@ -90,7 +86,7 @@ $(function() {
 
       $('#results').empty();
       $.each(output, function(i, song) {
-        var result = '<div class="result" data-id="' + song.id + '"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p></div></div>';
+        var result = '<div class="result" data-id="' + song.id + '" data-artist="' + song.artist + '" data-song="' + song.title + '" data-art="' + song.album_art + '"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p></div></div>';
         $(result).appendTo('#results').hide().fadeIn(200).click(queueTrack);
       });
     });
