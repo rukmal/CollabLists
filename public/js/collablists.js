@@ -6,7 +6,7 @@ var socket = io.connect();
 $(function() {
 
   var queue = [];
-
+  var cachedSongs;
   var currentState = {};
 
   $('#apiswf').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
@@ -41,6 +41,13 @@ $(function() {
     });
   });
 
+  var displayTracks = function (event) {
+    $('#playlist').empty();
+    var trackId = event.currentTarget.dataset.id.split(':')[2];
+    var track = '<div class="track">' + event.currentTarget.innerHTML + '</div>';
+    $(track).appendTo('#playlist');
+  }
+
   var queueTrack = function(event) {
     var trackId = event.currentTarget.dataset.id.split(':')[2];
     $('#apiswf').rdio().queue(trackId);
@@ -54,13 +61,32 @@ $(function() {
       album_art: event.currentTarget.dataset.art
     };
     
-    if (!currentState.playlist) {
-      currentState.playlist = [];
+    // if (!currentState.playlist) {
+    //   currentState.playlist = [];
+    // }
+    // currentState.playlist.push(song);
+    // console.log(currentState.playlist);
+    var addRequest = {
+      song: song,
+      owner_last_name: currentState.owner_last,
+      slug: currentState.slug
     }
-    currentState.playlist.push(song);
-    console.log(currentState.playlist);
+
+    socket.emit('add song', addRequest);
 
     var track = '<div class="track">' + event.currentTarget.innerHTML + '</div>';
+    $(track).appendTo('#playlist').hide().fadeIn(200)
+  };
+
+  function redrawPlaylist(songs) {
+    var cachedHash = cachedSongs.toString().prototype.hashCode();
+    var newHash = songs.toString().prototype.hashCode();
+    if (!(cachedHash === newHash)) {
+      $.each(songs, function (i, song) {
+        var song = '<div class="result" data-id="' + song.id + '" data-artist="' + song.artist + '" data-song="' + song.title + '" data-art="' + song.album_art + '"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p><i class="track-icon ion-music-note" style="display:none;"></i><button id="upvote"><i class="voting ion-arrow-up-b voting"></i></button><button id="downvote"><i id="downvote" class="ion-arrow-down-b voting"></i></button></div></div>'
+        $(song, displayTracks);
+      });
+    }
     $(track).appendTo('#playlist').hide().fadeIn(200);
 
     $('.upvote').click(function(event) {
@@ -111,7 +137,7 @@ $(function() {
             output.push(songInfo);
           }
         });
-      }
+      };
       output = output.slice(0, Math.min(3, output.length));
 
       $('#results').empty();
@@ -125,10 +151,10 @@ $(function() {
   // Get unique document identifier (only has to be done once)
   var url = document.URL;
   var splitURL = url.split('/');
-    var request = {};
-    // isolating the slug and owner last name from the URL
-    request.slug = splitURL[splitURL.length - 1];
-    request.owner_last_name = splitURL[splitURL.length - 2];
+  var request = {};
+  // isolating the slug and owner last name from the URL
+  request.slug = splitURL[splitURL.length - 1];
+  request.owner_last_name = splitURL[splitURL.length - 2];
   // Refresh page state
   var refreshRate = 1000; // ms
   setInterval(function () {
@@ -136,5 +162,7 @@ $(function() {
   }, refreshRate);
   socket.on('playlist update', function (playlistInfo) {
     currentState = playlistInfo;
+    redrawPlaylist(currentState.playlist);
+    cachedSongs = currentState.playlist;
   });
 });

@@ -52,7 +52,8 @@ var Routes = function (app, server) {
 			owner_first: req.body.owner_first.toLowerCase(),
 			owner_last: req.body.owner_last.replace(' ', '+').toLowerCase(), // replace spaces with plus signs
 			location: req.body.location,
-			slug: req.body.slug.toLowerCase()
+			slug: req.body.slug.toLowerCase(),
+			playlist: new Array()
 		});
 		// inserting the new party object into the database
 		newParty.save(function (err) {
@@ -75,7 +76,7 @@ var Routes = function (app, server) {
 		});
 
 		socket.on('add song', function (addSongInfo) {
-			// addSongInfo --> {partyID, song, owner_last_name}
+			// addSongInfo --> {slug, song, owner_last_name}
 			addSong(addSongInfo.owner_last_name, addSongInfo.slug, addSongInfo.song);
 		});
 
@@ -133,14 +134,21 @@ var Routes = function (app, server) {
 	 * @param {Object} song Song object with all required song metadata
 	 */
 	function addSong(name, slug, song) {
-		Party.findOneAndModify({
+		Party.findOne({
 			'owner_last': name,
 			'slug': slug
 		}, function (err, party) {
+			console.log('\n\n\n\n\nHERE\n\n\n\n\n\n');
 			if (err) {
 				res.render('error');
 			}
 			party.playlist.push(song);
+			console.log(party.playlist);
+			party.save(function (err) {
+				if (err) {
+					console.log(err);
+				}
+			});
 		});
 	};
 
