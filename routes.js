@@ -5,7 +5,7 @@
 var passport = require('passport');
 
 var Routes = function (app, server) {
-	var pageTitle = 'MyApp : '
+	var pageTitle = 'CollabLists : '
 		Party = require('./models/party'),
 
 	// HTTP GET routing
