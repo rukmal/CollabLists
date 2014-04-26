@@ -1,1 +1,0 @@
-var socket = io.connect(); // change port before deployment
