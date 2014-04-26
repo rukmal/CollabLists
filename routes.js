@@ -11,16 +11,6 @@ var Routes = function (app, server) {
 	// HTTP GET routing
 	// ================
 
-
-	app.get("/auth/facebook", passport.authenticate("facebook",{ scope : "email"}));
-
-	app.get("/auth/facebook/callback",
-	    passport.authenticate("facebook",{ failureRedirect: '/login'}),
-	    function(req,res){
-	        res.render("loggedin", {user : req.user});
-	    }
-	);
-
 	// landing page routing
 	app.get('/', function(req, res){
 	  res.render('index', { title: 'Express' });
