@@ -33,7 +33,6 @@ $(function() {
     }
     queue.shift();
     queue = [playingSource.key].concat(queue);
-    console.log(queue);
   });
 
   $('#apiswf').bind('queueChanged.rdio', function(e, newQueue) {
@@ -41,7 +40,6 @@ $(function() {
     $.each(newQueue, function(i, item) {
       queue.push(item.key);
     });
-    console.log(queue);
   });
 
   var queueTrack = function(event) {
@@ -86,7 +84,7 @@ $(function() {
             }
           });
           if (!songInfo.album_art) {
-            songInfo.album_art = 'img/default-album.png';
+            songInfo.album_art = '../img/default-album.png';
           }
           if (songInfo.id) {
             output.push(songInfo);
@@ -98,22 +96,30 @@ $(function() {
 
       $('#results').empty();
       $.each(output, function(i, song) {
-        var result = '<div class="result" data-id="' + song.id + '" data-artist="' + song.artist + '" data-song="' + song.title + '" data-art="' + song.album_art + '"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p><i class="track-icon ion-music-note" style="display:none;"></i></div></div>';
+        var result = '<div class="result" data-id="' + song.id + '" data-artist="' + song.artist + '" data-song="' + song.title + '" data-art="' + song.album_art + '"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p><i class="track-icon ion-music-note" style="display:none;"></i><button id="upvote"><i class="voting ion-arrow-up-b voting"></i></button><button id="downvote"><i id="downvote" class="ion-arrow-down-b voting"></i></button></div></div>';
         $(result).appendTo('#results').hide().fadeIn(200).click(queueTrack);
       });
     });
   }
 
+  $('#upvote').on('click', 'selector', function () {
+    console.log('here');
+  });
+  // Voting stuff
+
   // Get unique document identifier (only has to be done once)
   var url = document.URL;
   var splitURL = url.split('/');
-  console.log(splitURL);
-
-  // Refresh page state
-  var refreshRate = 750; // ms
-  setInterval(function () {
     var request = {};
-    request.
-    socket.emit('playlist update request', )
+    // isolating the slug and owner last name from the URL
+    request.slug = splitURL[splitURL.length - 1];
+    request.owner_last_name = splitURL[splitURL.length - 2];
+  // Refresh page state
+  var refreshRate = 1000; // ms
+  setInterval(function () {
+    socket.emit('playlist update request', request);
   }, refreshRate);
+  socket.on('playlist update', function (playlistInfo) {
+    currentState = playlistInfo;
+  });
 });
