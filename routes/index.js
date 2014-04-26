@@ -10,7 +10,8 @@ exports.index = function(req, res){
 exports.servePlaylistURL = function(req, res){
 	// check if the playlist URL is valid
 	if (req.params.playlistURL == "deadbeef")
-		res.send("Your playlist URL is : " + req.params.playlistURL);
+		// it's valid, so we serve the playlist view page
+		res.render('playlistview', {playlist: req.params.playlistURL});
 	else
 		// it's not valid, so we serve up a 404 not found page
 		res.render('notfound', { title: 'Express' });
