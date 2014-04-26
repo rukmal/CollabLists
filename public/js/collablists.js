@@ -17,28 +17,14 @@ $(function() {
     }, 500);
   });
 
-  function search(query) {
-    console.log(query);
+  function search(data) {
+    var echoNestURL = 'http://developer.echonest.com/api/v4/song/search?api_key=JBLMC5BKDIPYMLYD5&bucket=id:rdio-US&bucket=tracks&title=';
+    data = data.replace(' ', '+');
+    $.get(echoNestURL + data, showResults);
+  }
 
-    // call search API
-    
-    // get results back
-    var sample = {
-      results: [
-        {
-          title: 'Starlight',
-          artist: 'Muse'
-        },
-        {
-          title: 'Starlight',
-          artist: 'Muse'
-        },
-        {
-          title: 'Starlight',
-          artist: 'Muse'
-        }
-      ]
-    };
+  function showResults(results) {    
+    console.log(results);
 
     $('#results').empty();
     for (var i = 0; i < sample.results.length; i++) {
