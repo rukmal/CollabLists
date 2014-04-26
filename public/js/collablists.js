@@ -1,6 +1,11 @@
 $(function() {
 
   var timer = undefined;
+  var lastInput = undefined;
+
+  $('#search-input').focusout(function(event) {
+    $('.result').fadeOut(200);
+  });
 
   $('#search-input').keyup(function(event) {
     var query = event.currentTarget.value;
@@ -9,6 +14,12 @@ $(function() {
       $('#results').empty();
       return;
     }
+
+    if (query == lastInput) {
+      return;
+    }
+
+    lastInput = query;
 
     clearTimeout(timer);
 
@@ -38,17 +49,19 @@ $(function() {
             songInfo.id = track.foreign_id;
           }
         });
+        if (!songInfo.album_art) {
+          songInfo.album_art = 'img/default-album.png';
+        }
         output.push(songInfo);
       });
     }
 
-    console.log(output);
-
     // do something with output
     $('#results').empty();
-    for (var i = 0; i < output.length; i++) {
-      var result = '<div class="result"><p class="result-song">' + output[i].title + '</p><p class="result-artist">' + sample.results[i].artist + '</p></div>'
-      $('#results').append(result);
-    }
+    $.each(output, function(i, song) {
+      var result = '<div class="result"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p></div></div>'
+      // $('#results').append(result);
+      $(result).appendTo('#results').hide().fadeIn(200);
+    });
   }
 });
