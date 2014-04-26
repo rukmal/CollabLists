@@ -1,35 +1,56 @@
+var apiswf = undefined;
+var timer = undefined;
+var lastInput = undefined;
+
 $(function() {
 
-  var timer = undefined;
-  var lastInput = undefined;
+  $('#apiswf').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
+  
+  $('#apiswf').bind('ready.rdio', function(e, user) {
+    $('#apiswf').rdio().queue('t39978279');
+  });
+
+  // set up the controls
+  $('#play').click(function() {
+    $('#apiswf').rdio().playQueuedTrack(0, 0);
+  });
+
+  $('#next').click(function() {
+    $('#apiswf').rdio().next();
+  });
+
+  $('#apiswf').bind('queueChanged.rdio', function(e, newQueue) {
+    console.log(newQueue);
+  });
 
   $('#search-input').focusout(function(event) {
     $('.result').fadeOut(200);
   });
 
+  var queueTrack = function(event) {
+    var trackId = event.currentTarget.dataset.id.split(':')[2];
+    console.log(trackId);
+    $('#apiswf').rdio().queue(trackId);
+  }
+
   $('#search-input').keyup(function(event) {
     var query = event.currentTarget.value;
-
     if (query == '' || query == undefined) {
       $('#results').empty();
       return;
     }
-
     if (query == lastInput) {
       return;
     }
-
     lastInput = query;
-
     clearTimeout(timer);
-
     timer = setTimeout(function() {
       search(query);
     }, 500);
   });
 
   function search(data) {
-    var echoNestURL = 'http://developer.echonest.com/api/v4/song/search?api_key=JBLMC5BKDIPYMLYD5&bucket=id:rdio-US&bucket=tracks&results=3&bucket=id:7digital-US&sort=song_hotttnesss-desc&title=';
+    var echoNestURL = 'http://developer.echonest.com/api/v4/song/search?api_key=JBLMC5BKDIPYMLYD5&bucket=id:rdio-US&bucket=tracks&results=10&bucket=id:7digital-US&sort=song_hotttnesss-desc&title=';
     $.get(echoNestURL + data, function(results) {
       var output = [];
       if (results.response.status.code === 0) {
@@ -48,15 +69,20 @@ $(function() {
           if (!songInfo.album_art) {
             songInfo.album_art = 'img/default-album.png';
           }
-          output.push(songInfo);
+          if (songInfo.id) {
+            output.push(songInfo);
+          }
         });
       }
 
+      output = output.slice(0, Math.min(3, output.length));
+
       $('#results').empty();
       $.each(output, function(i, song) {
-        var result = '<div class="result"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p></div></div>'
-        $(result).appendTo('#results').hide().fadeIn(200);
+        var result = '<div class="result" data-id="' + song.id + '"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p></div></div>';
+        $(result).appendTo('#results').hide().fadeIn(200).click(queueTrack);
       });
     });
   }
+
 });
