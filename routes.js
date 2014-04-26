@@ -67,7 +67,7 @@ var Routes = function (app, server) {
 	var io = require('socket.io').listen(server);
 	io.sockets.on('connection', function (socket) {
 		socket.on('voting', function (votingInfo) {
-			 // votingInfo --> {partyID, song, voteType ['up' or 'down'], owner_last_name}
+			 // votingInfo --> {slug, song, voteType ['up' or 'down'], owner_last_name}
 			 updateVote(votingInfo.owner_last_name, votingInfo.slug, votingInfo.song, votingInfo.voteType);
 		});
 
@@ -86,7 +86,7 @@ var Routes = function (app, server) {
 		 */
 		socket.on('playlist update request', function (partyInfo) {
 			// partyInfo --> {owner_last_name, slug}
-			Party.find({
+			Party.findOne({
 				'owner_last': partyInfo.owner_last_name,
 				'slug': partyInfo.slug
 			}, function (err, party) {
