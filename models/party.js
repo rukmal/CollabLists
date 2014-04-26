@@ -43,4 +43,11 @@ var partySchema = new mongoose.Schema({
 	}
 });
 
-module.exports = mongoose.model('Party', partySchema)
+var facebookUserSchema = new mongoose.Schema({
+	fbId: String,
+	email: {type: String, lowercase: true},
+	name: String
+});
+
+module.exports = mongoose.model('Party', partySchema);
+module.exports = mongoose.model('FacebookUser', facebookUserSchema);
