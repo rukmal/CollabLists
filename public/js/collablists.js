@@ -9,8 +9,6 @@ $(function() {
 
   var currentState = {};
 
-  var mysong;
-
 
   $('#apiswf').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
 
@@ -45,13 +43,23 @@ $(function() {
   });
 
   var queueTrack = function(event) {
+    var trackId = event.currentTarget.dataset.id.split(':')[2];
+    $('#apiswf').rdio().queue(trackId);
+
+    console.log(event.currentTarget.dataset);
+    
+    var song = {
+      id: event.currentTarget.dataset.id,
+      title: event.currentTarget.dataset.song,
+      artist: event.currentTarget.dataset.artist,
+      album_art: event.currentTarget.dataset.art
+    };
+    
     if (!currentState.playlist) {
       currentState.playlist = [];
     }
-    currentState.playlist.push(mysong);
+    currentState.playlist.push(song);
     console.log(currentState.playlist);
-    var trackId = event.currentTarget.dataset.id.split(':')[2];
-    $('#apiswf').rdio().queue(trackId);
 
     var track = '<div class="track">' + event.currentTarget.innerHTML + '</div>';
     $(track).appendTo('#playlist').hide().fadeIn(200)
@@ -103,7 +111,6 @@ $(function() {
       $('#results').empty();
       $.each(output, function(i, song) {
         var result = '<div class="result" data-id="' + song.id + '" data-artist="' + song.artist + '" data-song="' + song.title + '" data-art="' + song.album_art + '"><img src="' + song.album_art + '" class="result-album-art"><div class="result-info"><p class="result-song">' + song.title + '</p><p class="result-artist">' + song.artist + '</p><i class="track-icon ion-music-note" style="display:none;"></i><button id="upvote"><i class="voting ion-arrow-up-b voting"></i></button><button id="downvote"><i id="downvote" class="ion-arrow-down-b voting"></i></button></div></div>';
-        mysong = song;
         $(result).appendTo('#results').hide().fadeIn(200).click(queueTrack);
       });
     });
