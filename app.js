@@ -5,9 +5,15 @@
 
 var express = require('express')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , mongoose = require('mongoose')
+  , collectionName = 'parties'
+  , dbURL = 'mongodb://localhost/' + collectionName;
 
 var app = express();
+
+// Connecting to MongoDB
+mongoose.connect(dbURL);
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
@@ -26,12 +32,8 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-// app.get('/', routes.index);
-// app.get('/:playlistURL', routes.servePlaylistURL);
-
-require(__dirname + '/routes')(app)
-
-
-http.createServer(app).listen(app.get('port'), function(){
+var server = http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+require(__dirname + '/routes')(app, server)
