@@ -45,13 +45,13 @@ hr { display: block; height: 1px;
 
 #wrap {
   height: auto;
-  margin: 0 auto -80px;
+  margin: 0 auto -110px;
   min-height: 100%;
-  padding: 0 0 80px;
+  padding: 0 0 110px;
 }
 
 #footer {
-  height: 80px;
+  height: 110px;
   text-align: center;
 }
 

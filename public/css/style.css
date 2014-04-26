@@ -9,20 +9,41 @@ body {
   background-color: white;
 }
 
+#buttons {
+  text-align: center;
+}
+
 #wrap {
   height: auto;
-  margin: 0 auto -80px;
+  margin: 0 auto -110px;
   min-height: 100%;
-  padding: 0 0 80px;
+  padding: 0 0 110px;
 }
 
 #footer {
-  height: 80px;
+  height: 110px;
   text-align: center;
 }
 
 #heart-icon {
   color: #ff4e50;
+}
+
+.arrows {
+  position: absolute;
+  margin-top: 4px;
+  margin-left: -3px;
+  font-size: 24px;
+}
+
+.upvote {
+  float: left;
+}
+
+.downvote {
+  float: left;
+  margin-top: 18px;
+  margin-left: -15px;
 }
 
 html, body {
@@ -89,11 +110,12 @@ html, body {
 .result-album-art {
   width: 50px;
   float: left;
+  margin-left: 20px;
   border-radius: 3px;
 }
 
 .result-info {
-  margin-left: 60px;
+  margin-left: 82px;
   margin-top: 5px;
 }
 
