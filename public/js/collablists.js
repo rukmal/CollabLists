@@ -153,11 +153,18 @@ $(function() {
   request.owner_last_name = splitURL[splitURL.length - 2];
   // Refresh page state
   var refreshRate = 1000; // ms
+  var first = true;
   setInterval(function () {
     socket.emit('playlist update request', request);
   }, refreshRate);
   socket.on('playlist update', function (playlistInfo) {
     currentState = playlistInfo;
+    if (first) {
+      $.each(playlistInfo.playlist, function (i, song) {
+        $('#apiswf').rdio().queue(song.id);
+      });
+      first = false;
+    }
     redrawPlaylist(currentState.playlist);
   });
 });
