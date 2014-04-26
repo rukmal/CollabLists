@@ -31,8 +31,9 @@ var Routes = function (app, server) {
 		}, function (err, party) {
 			if (err) {
 				res.render('error');
+			} else {
+				res.render('party-info', party); // create a page to render party information
 			}
-			res.render('party-info', party); // create a page to render party information
 		});
 	});
 
