@@ -4,7 +4,6 @@
  */
 
 var express = require('express')
-  , routes = require('./routes')
   , http = require('http')
   , path = require('path');
 
@@ -27,8 +26,10 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
-app.get('/', routes.index);
-app.get('/:playlistURL', routes.servePlaylistURL);
+// app.get('/', routes.index);
+// app.get('/:playlistURL', routes.servePlaylistURL);
+
+require(__dirname + '/routes')(app)
 
 
 http.createServer(app).listen(app.get('port'), function(){
