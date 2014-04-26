@@ -9,6 +9,7 @@ var express = require('express')
   , path = require('path');
 
 var databaseUrl = "localdb"; 
+// TODO figure out what goes here under collections
 var collections = ["things"];
 var db = require("mongojs").connect(databaseUrl, collections);
 
