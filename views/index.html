@@ -3,13 +3,36 @@
 <head>
   <meta charset="utf-8">
   <title>CollabLists</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600">
+  <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/1.4.1/css/ionicons.min.css">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <h1>CollabLists</h1>
+  <div id="wrap">
+    <div class="container">
+    
+    <div class="header">
+      <h1 id="header-title">CollabLists</h1>
+      <i class="ion-search" id="search-icon"></i>
+      <input type="text" id="search-input" placeholder="Search for songs or artists">
+      <div id="results">
+        
+      </div>
+    </div>
 
+    </div>
+  </div>
 
+  <div class="container" id="footer">
+    <hr>
+    <p>Made with <i class="ion-heart" id="heart-icon"></i>.</p>
+  </div>
+
+  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+  <script src="js/collablists.js"></script>
 </body>
 </html>

@@ -1,8 +1,90 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+@media (min-width: 768px) {
+  .container {
+    width: 768px;
+  }
 }
 
-a {
-  color: #00B7FF;
+body {
+  font-family: 'Open Sans', Arial, sans-serif;
+}
+
+#wrap {
+  height: auto;
+  margin: 0 auto -80px;
+  min-height: 100%;
+  padding: 0 0 80px;
+}
+
+#footer {
+  height: 80px;
+  text-align: center;
+}
+
+#heart-icon {
+  color: #ff4e50;
+}
+
+html, body {
+  height: 100%;
+}
+
+#header-title {
+  font-family: 'Open Sans', Arial, sans-serif;
+  text-align: center;
+  font-size: 48px;
+  font-weight: 600;
+}
+
+#search-input {
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, .175);
+  border-radius: 3px;
+  font-size: 20px;
+  height: 42px;
+  margin: 20px 0;
+  padding: 0 10px 0 41px;
+  margin-bottom: 0;
+}
+
+#search-input:hover {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, .175);
+}
+
+#search-input:focus {
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, .3);
+}
+
+#search-icon {
+  color: #34495e;
+  font-size: 26px;
+  margin: 28px 0 0 12px;
+  position: absolute;
+}
+
+.result {
+  border: 1px solid rgba(0, 0, 0, .175);
+  padding: 10px;
+  border-top: none;
+}
+
+.result:hover {
+  background-color: #3498db;
+  color: #fff;
+}
+
+.result:last-child {
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.result-song {
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.result-artist {
+  font-style: italic;
+  margin-bottom: 0;
 }
