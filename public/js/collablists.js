@@ -1,10 +1,14 @@
 var apiswf = undefined;
 var timer = undefined;
 var lastInput = undefined;
+var socket = io.connect();
 
 $(function() {
 
   var queue = [];
+
+  var currentState = {};
+
 
   $('#apiswf').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
 
@@ -100,4 +104,16 @@ $(function() {
     });
   }
 
+  // Get unique document identifier (only has to be done once)
+  var url = document.URL;
+  var splitURL = url.split('/');
+  console.log(splitURL);
+
+  // Refresh page state
+  var refreshRate = 750; // ms
+  setInterval(function () {
+    var request = {};
+    request.
+    socket.emit('playlist update request', )
+  }, refreshRate);
 });

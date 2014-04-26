@@ -1,6 +1,5 @@
-
 /*
- * GET home page.
+ * @description Main routing file for application
  */
 
 var Routes = function (app, server) {
@@ -25,8 +24,8 @@ var Routes = function (app, server) {
 	// dynamic party url routing
 	app.get('/:name/:slug', function(req, res){
 		Party.find({
-			'owner_last': name,
-			'slug': slug 
+			'owner_last': req.params.name,
+			'slug': req.params.slug 
 		}, function (err, party) {
 			if (err) {
 				res.render('error');
@@ -46,9 +45,11 @@ var Routes = function (app, server) {
 			created_on: new Date(),
 			firstName: req.body.first,
 			lastName: req.body.last,
-			ownerid: req.body.ownerid, // <-- FIX THIS
+			owner_id: req.body.owner_id,
+			owner_first: req.body.owner_first.toLowerCase(),
+			owner_last: req.body.owner_last.replace(' ', '+').toLowerCase(), // replace spaces with plus signs
 			location: req.body.location,
-			slug: req.body.slug
+			slug: req.body.slug.toLowerCase()
 		});
 		// inserting the new party object into the database
 		newParty.save(function (err) {
@@ -56,14 +57,13 @@ var Routes = function (app, server) {
 				// redirect to error page
 				console.log(err);
 			} else {
-				// redirect to confirmation page
-				console.log('success!');
+				// redirect to party page
+				res.redirect('/' + newParty.owner_last + '/' + newParty.slug);
 			}
 		});
 	});
 
 	// Socket.io stuff
-	var clientUpdateInterval = 500; // ms
 	var io = require('socket.io').listen(server);
 	io.sockets.on('connection', function (socket) {
 		socket.on('voting', function (votingInfo) {
@@ -90,7 +90,6 @@ var Routes = function (app, server) {
 				'owner_last': partyInfo.owner_last_name,
 				'slug': partyInfo.slug
 			}, function (err, party) {
-				output = party;
 				socket.emit('playlist update', party);
 			});
 		});
