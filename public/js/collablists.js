@@ -4,33 +4,44 @@ var lastInput = undefined;
 
 $(function() {
 
+  var queue = [];
+
   $('#apiswf').rdio('GAlNi78J_____zlyYWs5ZG02N2pkaHlhcWsyOWJtYjkyN2xvY2FsaG9zdEbwl7EHvbylWSWFWYMZwfc=');
-  
-  $('#apiswf').bind('ready.rdio', function(e, user) {
-    $('#apiswf').rdio().queue('t39978279');
-  });
 
   // set up the controls
   $('#play').click(function() {
-    $('#apiswf').rdio().playQueuedTrack(0, 0);
+    $('#apiswf').rdio().play();
   });
 
   $('#next').click(function() {
     $('#apiswf').rdio().next();
   });
 
-  $('#apiswf').bind('queueChanged.rdio', function(e, newQueue) {
-    console.log(newQueue);
-  });
-
   $('#search-input').focusout(function(event) {
     $('.result').fadeOut(200);
   });
 
+  $('#apiswf').bind('playingSourceChanged.rdio', function(e, playingSource) {
+    if (queue.length === 0) {
+      // queue = [playingSource.key].concat(queue);
+    }
+    console.log(queue);
+  });
+
+  $('#apiswf').bind('queueChanged.rdio', function(e, newQueue) {
+    queue = [];
+    $.each(newQueue, function(i, item) {
+      queue.push(item.key);
+    });
+    console.log('new: ' + queue);
+    console.log(queue);
+  });
+
   var queueTrack = function(event) {
     var trackId = event.currentTarget.dataset.id.split(':')[2];
-    console.log(trackId);
     $('#apiswf').rdio().queue(trackId);
+    queue.push(trackId);
+    console.log(queue);
   }
 
   $('#search-input').keyup(function(event) {
