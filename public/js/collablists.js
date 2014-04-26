@@ -18,13 +18,33 @@ $(function() {
   });
 
   function search(data) {
-    var echoNestURL = 'http://developer.echonest.com/api/v4/song/search?api_key=JBLMC5BKDIPYMLYD5&bucket=id:rdio-US&bucket=tracks&title=';
+    var echoNestURL = 'http://developer.echonest.com/api/v4/song/search?api_key=JBLMC5BKDIPYMLYD5&bucket=id:rdio-US&bucket=tracks&results=3&bucket=id:7digital-US&sort=song_hotttnesss-desc&title=';
     data = data.replace(' ', '+');
     $.get(echoNestURL + data, showResults);
   }
 
-  function showResults(results) {    
-    console.log(results);
+  function showResults(results) {
+    var output = new Array();
+    if (result.status.code != 5) {
+      for each (song in results.songs) {
+        var songInfo = {};
+        // Isolating song title and artist
+        songInfo.title = song.title;
+        songInfo.artist = song.artist_id;
+        // Isolating album art and track id
+        for each (track in song.tracks) {
+          if (songInfo.album_art && track.release_image) {
+            songInfo.album_art = track.release_image;
+          }
+          if (songInfo.id && (song.id === 'rdio-US')) {
+            songInfo.id = track.foreign_id;
+          }
+        }
+        output.push(songInfo);
+      }
+    }
+
+    // do something with output
 
     $('#results').empty();
     for (var i = 0; i < sample.results.length; i++) {
@@ -32,5 +52,4 @@ $(function() {
       $('#results').append(result);
     }
   }
-
 });
